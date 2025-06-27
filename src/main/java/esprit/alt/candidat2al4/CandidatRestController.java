@@ -11,7 +11,7 @@ import java.util.List;
 public class CandidatRestController {
 
 
-    private String title ="hello from ms candidat 2alt4";
+    private String title ="hello from ms candidat 2alt4 version 2";
     @Autowired
     private CandidatService candidatService;
     @GetMapping("/hello")
