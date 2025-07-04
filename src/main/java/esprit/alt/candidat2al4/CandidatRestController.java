@@ -1,6 +1,7 @@
 package esprit.alt.candidat2al4;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,33 @@ public class CandidatRestController {
             return ResponseEntity.ok(deleted);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/jobs")
+    public List<Job> getJobList() {
+        return candidatService.getallJob();
+    }
+
+    @GetMapping("/jobs/{id}")
+    public Job getJob(@PathVariable(value = "id") int id) {
+        return candidatService.getjobById(id);
+    }
+    @GetMapping("/{id}/favorite-jobs")
+    public List<Job> getFavoriteJobs(@PathVariable int id) {
+        return candidatService.getFavoriteJobs(id);
+    }
+    @PostMapping("/{id}/favorite-jobs/{jobId}")
+    public ResponseEntity<String> saveFavoriteJob(@PathVariable int id, @PathVariable
+    int jobId) {
+        Job job = candidatService.getjobById(jobId);
+        if (job != null) {
+            candidatService.saveFavoriteJob(id, jobId);
+            return ResponseEntity.status(HttpStatus.OK).body("Job saved as favorite successfully.");
+        } else {
+            // Gérer le cas où le job n'existe pas
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Job not found with ID: " + jobId);
         }
     }
 
